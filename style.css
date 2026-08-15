@@ -1,0 +1,57 @@
+body {
+    background-color: pink;
+}
+
+#H1 {
+    text-align: center;
+}
+
+#input {
+    width: 500px;
+    height: 20px;
+    margin: auto;
+    display: flex;
+    background-color: lightgreen;
+    padding: 10px;
+    justify-content: space-evenly;
+}
+
+#list {
+    width: 500px;
+    height: 500px;
+    margin: 10px auto 0;
+    background-color: antiquewhite;
+    position: relative;
+}
+
+#deleteArea {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#tlist {
+    width: 300px;
+    flex: 1;
+}
+
+#tlist li {
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    cursor: pointer;
+}
+
+#tlist li button {
+    margin-left: auto;
+}
+
+
+
+#delall {
+    width: 80px;
+    height: 20px;
+}
