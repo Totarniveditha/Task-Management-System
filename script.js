@@ -1,12 +1,11 @@
+
 let ac = document.getElementById("ac");
 let submit = document.getElementById("submit");
 
 let ntask;
 let completed;
 let notaskyet;
-let logout=document.getElementById("logout");
-
-
+let logout = document.getElementById("logout");
 
 //checksession
 fetch("http://127.0.0.1:3000/check-session", {
@@ -36,50 +35,40 @@ if (tlist.children.length === 0) {
     notaskyet.innerHTML = "NO task yet";
 }
 
-
 // FUNCTION TO CREATE A TASK
-function createTask(taskText,taskid,completedstatus) {
+function createTask(taskText, taskid, completedstatus) {
 
     let li = document.createElement("li");
     li.appendChild(document.createTextNode(taskText));
 
-
     // CHECKBOX
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.checked=completedstatus;
+    checkbox.checked = completedstatus;
     li.appendChild(checkbox);
-
 
     let completedcount = document.getElementById("completed");
 
     checkbox.addEventListener("change", () => {
 
-
-
-        fetch("http://127.0.0.1:3000/tasks/completed",{
-            method:"PUT",
-            credentials:"include",
+        fetch("http://127.0.0.1:3000/tasks/completed", {
+            method: "PUT",
+            credentials: "include",
             headers: {
-                "content-type":"application/json"
+                "content-type": "application/json"
             },
-            body:JSON.stringify({
-            
-
-            id: taskid,
-            completed: checkbox.checked
-
+            body: JSON.stringify({
+                id: taskid,
+                completed: checkbox.checked
             })
-        }).then(res=>{
+        }).then(res => {
             return res.json();
         })
-        .then(data=>{
-            console.log(data.message);
-            
+        .then(data => {
         });
 
         completed = document.querySelectorAll("input:checked");
-       
+
         completedcount.innerHTML = completed.length;
 
         if (completed.length === tlist.children.length) {
@@ -87,46 +76,33 @@ function createTask(taskText,taskid,completedstatus) {
         }
     });
 
-
     // DELETE BUTTON
     let button = document.createElement("button");
     button.innerHTML = "delete";
 
     li.appendChild(button);
 
-
     button.addEventListener("click", () => {
 
-
-      fetch(`http://127.0.0.1:3000/tasks/${taskid}`,{
-        method:"DELETE",
-        credentials:"include",
-      })
-      .then(res=>{
-       return  res.json();
-      })
-      .then(data=>{
-        console.log(data);
-      });
-
-
-
-
-
-
+        fetch(`http://127.0.0.1:3000/tasks/${taskid}`, {
+            method: "DELETE",
+            credentials: "include",
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(data => {
+        });
 
         li.remove();
 
         ntask.innerHTML = tlist.children.length;
 
         if (tlist.children.length === 0) {
-
             notaskyet = document.getElementById("notaskyet");
-
             notaskyet.innerHTML = "NO task yet";
         }
     });
-
 
     // DOUBLE CLICK EDIT
     li.addEventListener("dblclick", () => {
@@ -134,41 +110,32 @@ function createTask(taskText,taskid,completedstatus) {
         let oldtext = li.firstChild.textContent;
 
         let edit = document.createElement("input");
-
         edit.value = oldtext;
 
         li.firstChild.replaceWith(edit);
-
 
         edit.addEventListener("keydown", (event) => {
 
             if (event.key === "Enter") {
 
-            let newtext = edit.value;
+                let newtext = edit.value;
 
-
-
-            //send to backend when edited new task
-             fetch(`http://127.0.0.1:3000/tasks`,{
-                method:"PUT",
-                credentials:"include",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    name:newtext,
-                    id:taskid
+                //send to backend when edited new task
+                fetch(`http://127.0.0.1:3000/tasks`, {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: newtext,
+                        id: taskid
+                    })
+                }).then(res => {
+                    return res.json();
                 })
-             }).then(res=>{
-                return res.json();
-             })
-             .then(data=>{
-                console.log(data.message);
-             });
-
-
-
-
+                .then(data => {
+                });
 
                 edit.replaceWith(
                     document.createTextNode(newtext)
@@ -177,182 +144,107 @@ function createTask(taskText,taskid,completedstatus) {
         });
     });
 
-
     // ADD LI TO LIST
     tlist.appendChild(li);
 
     notaskyet.innerHTML = "";
 
     ntask = document.getElementById("ntask");
-
     ntask.innerHTML = tlist.children.length;
 
     completed = document.querySelectorAll("input:checked");
 
-completedcount = document.getElementById("completed");
+    completedcount = document.getElementById("completed");
+    completedcount.innerHTML = completed.length;
 
-completedcount.innerHTML = completed.length;
-
-if (completed.length === tlist.children.length) {
-    completedcount.innerHTML = "🎊";
+    if (completed.length === tlist.children.length) {
+        completedcount.innerHTML = "🎊";
+    }
 }
-
-
-
-
-}
-
-
 
 // ADD NEW TASK
 submit.addEventListener("click", () => {
 
-
     if (ac.value !== "") {
 
-
-        let newtask=ac.value;
+        let newtask = ac.value;
 
         fetch("http://127.0.0.1:3000/tasks", {
-
             method: "POST",
-
             credentials: "include",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
                 name: newtask
             })
-
         })
         .then(res => {
-
-            console.log("RESPONSE ARRIVED");
-
             return res.json();
-
         })
         .then(data => {
 
-            console.log(data.message);
-
-            console.log(data.task.name);
-             // CREATE TASK IN UI
-        createTask(newtask,data.id);
-           
-
+            // CREATE TASK IN UI
+            createTask(newtask, data.id);
         })
         .catch(error => {
-
-            console.log("FETCH ERROR:", error);
-
         });
-
-
-       
     }
 
-
-    console.log("submitted");
-
-    console.log(ac.value);
-
     ac.value = "";
-
 });
-
-
 
 // DELETE ALL
 let delall = document.getElementById("delall");
 
 delall.addEventListener("click", () => {
 
-  
-
-    fetch("http://127.0.0.1:3000/tasks",{
-        method:"DELETE",
-        credentials:"include"
-    }).then(res=>{
+    fetch("http://127.0.0.1:3000/tasks", {
+        method: "DELETE",
+        credentials: "include"
+    }).then(res => {
         return res.json();
     })
-    .then(data=>{
-        console.log(data.message);
+    .then(data => {
 
-         tlist.innerHTML = "";
-
-    ntask.innerHTML = tlist.children.length;
-
-
+        tlist.innerHTML = "";
+        ntask.innerHTML = tlist.children.length;
     });
 
-
-
-
     if (tlist.children.length === 0) {
-
         notaskyet = document.getElementById("notaskyet");
-
         notaskyet.innerHTML = "NO task yet";
     }
-
 });
-
-
 
 // GET TASKS FROM MONGODB
 fetch("http://127.0.0.1:3000/tasks", {
-
     method: "GET",
-
     credentials: "include"
-
 })
 .then(res => {
-
     return res.json();
-
 })
 .then(data => {
 
-    console.log("MY TASKS:", data);
-
-
     // CREATE EVERY STORED TASK IN UI
     data.forEach(task => {
-
-        createTask(task.task,task._id,task.completed);
-     
-
+        createTask(task.task, task._id, task.completed);
     });
-
-   
-
-
-
-
 })
 .catch(error => {
-
-    console.log("FETCH ERROR:", error);
-
 });
 
-
 //logout
-logout.addEventListener("click",()=>{
-    fetch("http://127.0.0.1:3000/logout",{
-       method:"POST",
-       credentials:"include", 
-    }).then(res=>{
+logout.addEventListener("click", () => {
+    fetch("http://127.0.0.1:3000/logout", {
+        method: "POST",
+        credentials: "include",
+    }).then(res => {
         return res.json();
     })
-    .then(data=>{
-        console.log(data.message);
-        if(data.message=="Logout successfully")
-            window.location.href="login.html";
+    .then(data => {
+        if (data.message == "Logout successfully")
+            window.location.href = "login.html";
     });
 });

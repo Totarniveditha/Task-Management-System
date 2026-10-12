@@ -1,17 +1,11 @@
 
-console.log("js running");
-
-
 let username=document.getElementById("username");
 
 let login=document.getElementById("logged");
 
-
-
-
-
 let password=document.getElementById("password");
 let blogin=document.getElementById("blogin");
+
 blogin.addEventListener("click",()=>{
   let logindata= {
    name:username.value,
@@ -41,15 +35,10 @@ login.textContent = "";
    })
    .then(data=>{
     
-
-
-    // console.log(data.message);
      login.textContent = data.message;
-     console.log(data.message);
   
 if(data.message=="Login successful")
 {
-    console.log(data.user_id);
     setTimeout(()=>{window.location.href="index.html";},2000);
    
 }

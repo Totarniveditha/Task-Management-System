@@ -1,3 +1,4 @@
+
 let ruser=document.getElementById("ruser");
 let rpass=document.getElementById("rpass");
 let register=document.getElementById("register");
@@ -36,7 +37,6 @@ register.addEventListener("click",()=>{
     })
     .then(data=>
     {
-        console.log(data.message);
        // let text=document.createElement("p");
         text.textContent=data.message;
         remessage.appendChild(text);
