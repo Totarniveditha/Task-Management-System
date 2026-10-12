@@ -74,7 +74,6 @@ app.get("/check-session", (req, res) => {
 
             try{
             
-              console.log(req.body);
     console.log("TASK SESSION:", req.session);
             const taskdata=req.body;
             const result =await task.insertOne({
