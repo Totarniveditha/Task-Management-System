@@ -4,6 +4,7 @@ let register=document.getElementById("register");
 let remessage=document.getElementById("remessage");
 let loading=document.createElement("div");
 loading.classList.add("loader");
+let text=document.createElement("p");
 
 register.addEventListener("click",()=>{
     let registerval={
@@ -11,6 +12,14 @@ register.addEventListener("click",()=>{
         password:rpass.value
 
     };
+
+    text.textContent="";
+    remessage.innerHTML = "";
+    if (ruser.value === "" || rpass.value === "") {
+        remessage.textContent = "Please enter username and password";
+        return;
+    }
+
     
     fetch("http://localhost:3000/register",{
         method:"POST",
@@ -28,7 +37,7 @@ register.addEventListener("click",()=>{
     .then(data=>
     {
         console.log(data.message);
-        let text=document.createElement("p");
+       // let text=document.createElement("p");
         text.textContent=data.message;
         remessage.appendChild(text);
         remessage.appendChild(loading);
