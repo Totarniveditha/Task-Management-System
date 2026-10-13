@@ -274,7 +274,7 @@ app.post("/login", async (req, res) => {
 
         if (!logged) {
             return res.status(401).json({
-                message: "Invalid username or password"
+                message: "Invalid username"
             });
         }
 
@@ -285,7 +285,7 @@ app.post("/login", async (req, res) => {
 
         if (!isMatch) {
             return res.status(401).json({
-                message: "Invalid username or password"
+                message: "Invalid password"
             });
         }
 
